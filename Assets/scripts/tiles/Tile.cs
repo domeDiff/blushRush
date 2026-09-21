@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Tiles : MonoBehaviour
+public class Tile : MonoBehaviour
 {
     public int tileType;
     public Vector2Int boardPosition;

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1617922097576547256}
   - component: {fileID: 6023776054829170776}
-  - component: {fileID: 2613830524983649760}
+  - component: {fileID: 6806149105652513489}
   m_Layer: 0
   m_Name: Tile
   m_TagString: Untagged
@@ -92,7 +92,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &2613830524983649760
+--- !u!114 &6806149105652513489
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -101,8 +101,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 3843613203642522520}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4690a520106bb34fa2aa5342e779262, type: 3}
+  m_Script: {fileID: 11500000, guid: d610dba876752534c9193a46673decc1, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Tiles
+  m_EditorClassIdentifier: Assembly-CSharp::Tile
   tileType: 0
   boardPosition: {x: 0, y: 0}
