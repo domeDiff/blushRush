@@ -141,6 +141,8 @@ public class BoardManager : MonoBehaviour
         second.transform.position = GetWorldPosition(firstPosition);
 
         selectedTile = null;
+
+        CheckForMatches();
     }
 
     private Vector3 GetWorldPosition(Vector2Int position)
@@ -149,6 +151,33 @@ public class BoardManager : MonoBehaviour
         float startY = -(height - 1) * tileSize / 2f;
 
         return new Vector3(startX + position.x * tileSize, startY + position.y * tileSize, 0f);
+    }
+
+    private void CheckForMatches()
+    {
+        for(int x=0; x<width; x++)
+        {
+            for(int y = 0; y < height; y++)
+            {
+                Tile tile = board[x, y];
+
+                if(x <= width - 3)
+                {
+                    if (board[x + 1, y].tileType == tile.tileType && board[x+2,y].tileType == tile.tileType)
+                    {
+                        Debug.Log("horizontal match at: " + tile.boardPosition);
+                    }
+                }
+
+                if (y <= height - 3)
+                {
+                    if (board[x, y+1].tileType == tile.tileType && board[x, y+2].tileType == tile.tileType)
+                    {
+                        Debug.Log("vertical match at: " + tile.boardPosition);
+                    }
+                }
+            }
+        }
     }
 }
 
