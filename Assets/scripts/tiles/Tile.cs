@@ -4,11 +4,13 @@ public class Tile : MonoBehaviour
 {
     public int tileType;
     public Vector2Int boardPosition;
+    private BoardManager boardManager;
 
-    public void Setup(int type, Vector2Int position)
+    public void Setup(int type, Vector2Int position, BoardManager manager)
     {
         tileType = type;
         boardPosition = position;
+        boardManager = manager;
 
         SetColor();
     }
@@ -42,6 +44,6 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDown()
     {
-        BoardManager.SelectTile(this);
+        boardManager.SelectTile(this);
     }
 }

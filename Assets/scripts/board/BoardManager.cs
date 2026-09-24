@@ -41,7 +41,7 @@ public class BoardManager : MonoBehaviour
                     transform
                 );
 
-                tile.Setup(tileType, new Vector2Int(x, y), this;
+                tile.Setup(tileType, new Vector2Int(x, y), this);
 
                 board[x, y] = tile;
             }
@@ -102,7 +102,9 @@ public class BoardManager : MonoBehaviour
         if(AreAdjacent(selectedTile, tile))
         {
             SwapTiles(selectedTile, tile);
+            return;
         }
+
         else
         {
             selectedTile = tile;
@@ -125,6 +127,9 @@ public class BoardManager : MonoBehaviour
 
         board[firstPosition.x, firstPosition.y] = second;
         board[secondPosition.x, secondPosition.y] = first;
+
+        first.boardPosition = secondPosition;
+        second.boardPosition = firstPosition;
 
         first.transform.position = GetWorldPosition(secondPosition);
         second.transform.position = GetWorldPosition(firstPosition);
