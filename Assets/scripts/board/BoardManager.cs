@@ -7,6 +7,7 @@ public class BoardManager : MonoBehaviour
     [SerializeField] private float tileSize = 1f;
     [SerializeField] private Tile tilePrefab;
 
+    private Tile selectedTile;
     private Tile[,] board;
 
     private void Start()
@@ -40,7 +41,7 @@ public class BoardManager : MonoBehaviour
                     transform
                 );
 
-                tile.Setup(tileType, new Vector2Int(x, y));
+                tile.Setup(tileType, new Vector2Int(x, y), this;
 
                 board[x, y] = tile;
             }
@@ -80,6 +81,63 @@ public class BoardManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void SelectTile(Tile tile)
+    {
+        if(selectedTile == null)
+        {
+            selectedTile = tile;
+
+            Debug.Log("selected: " + tile.boardPosition);
+            return;
+        }
+
+        if(tile == selectedTile)
+        {
+            selectedTile = null;
+            return;
+        }
+
+        if(AreAdjacent(selectedTile, tile))
+        {
+            SwapTiles(selectedTile, tile);
+        }
+        else
+        {
+            selectedTile = tile;
+            Debug.Log("selected: " + tile.boardPosition);
+        }
+    }
+
+    private bool AreAdjacent(Tile first, Tile second)
+    {
+        int distanceX = Mathf.Abs(first.boardPosition.x - second.boardPosition.x);
+        int distanceY = Mathf.Abs(first.boardPosition.y - second.boardPosition.y);
+
+        return distanceX + distanceY == 1;
+    }
+
+    private void SwapTiles(Tile first, Tile second)
+    {
+        Vector2Int firstPosition = first.boardPosition;
+        Vector2Int secondPosition = second.boardPosition;
+
+        board[firstPosition.x, firstPosition.y] = second;
+        board[secondPosition.x, secondPosition.y] = first;
+
+        first.transform.position = GetWorldPosition(secondPosition);
+        second.transform.position = GetWorldPosition(firstPosition);
+
+        selectedTile = null;
+    }
+
+    private Vector3 GetWorldPosition(Vector2Int position)
+    {
+        float startX = -(width - 1) * tileSize / 2f;
+        float startY = -(height - 1) * tileSize / 2f;
+
+        return new Vector3(startX + position.x * tileSize, startY + position.y * tileSize, 0f);
     }
 }
 

@@ -39,4 +39,9 @@ public class Tile : MonoBehaviour
 
         }
     }
+
+    private void OnMouseDown()
+    {
+        BoardManager.SelectTile(this);
+    }
 }
