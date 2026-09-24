@@ -88,6 +88,7 @@ public class BoardManager : MonoBehaviour
         if(selectedTile == null)
         {
             selectedTile = tile;
+            selectedTile.SetSelected(true);
 
             Debug.Log("selected: " + tile.boardPosition);
             return;
@@ -95,21 +96,26 @@ public class BoardManager : MonoBehaviour
 
         if(tile == selectedTile)
         {
+            selectedTile.SetSelected(false);
             selectedTile = null;
             return;
         }
 
         if(AreAdjacent(selectedTile, tile))
         {
+            selectedTile.SetSelected(false);
+
             SwapTiles(selectedTile, tile);
             return;
         }
 
-        else
-        {
-            selectedTile = tile;
-            Debug.Log("selected: " + tile.boardPosition);
-        }
+        selectedTile.SetSelected(false);
+        
+        selectedTile = tile;
+        selectedTile.SetSelected(true);
+
+        Debug.Log("selected: " + tile.boardPosition);
+        
     }
 
     private bool AreAdjacent(Tile first, Tile second)

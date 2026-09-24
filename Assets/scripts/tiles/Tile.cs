@@ -6,11 +6,15 @@ public class Tile : MonoBehaviour
     public Vector2Int boardPosition;
     private BoardManager boardManager;
 
+    private Vector3 originalScale;
+
     public void Setup(int type, Vector2Int position, BoardManager manager)
     {
         tileType = type;
         boardPosition = position;
         boardManager = manager;
+
+        originalScale = transform.localScale;
 
         SetColor();
     }
@@ -45,5 +49,17 @@ public class Tile : MonoBehaviour
     private void OnMouseDown()
     {
         boardManager.SelectTile(this);
+    }
+
+    public void SetSelected(bool selected)
+    {
+        if (selected)
+        {
+            transform.localScale = originalScale * 1.1f;
+        }
+        else
+        {
+            transform.localScale = originalScale;
+        }
     }
 }
