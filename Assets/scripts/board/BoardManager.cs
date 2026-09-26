@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System.Collections.Generic;
 public class BoardManager : MonoBehaviour
 {
     [SerializeField] private int width = 8;
@@ -140,9 +140,30 @@ public class BoardManager : MonoBehaviour
         first.transform.position = GetWorldPosition(secondPosition);
         second.transform.position = GetWorldPosition(firstPosition);
 
-        selectedTile = null;
+        List<Tile> matches = FindMatches();
 
-        CheckForMatches();
+        if (matches.Contains(first) || matches.Contains(second))
+        {
+            Debug.Log("valid swap! matches found: " + matches.Count);
+
+            RemoveMatches(matches);
+        }
+
+        else
+        {
+            board[firstPosition.x, firstPosition.y] = first;
+            board[secondPosition.x, secondPosition.y] = second;
+
+            first.boardPosition = firstPosition;
+            second.boardPosition = secondPosition;
+
+            first.transform.position = GetWorldPosition(firstPosition);
+            second.transform.position = GetWorldPosition(secondPosition);
+
+            Debug.Log("invalid swap - swap undone");
+        }
+
+        selectedTile = null;
     }
 
     private Vector3 GetWorldPosition(Vector2Int position)
@@ -153,31 +174,60 @@ public class BoardManager : MonoBehaviour
         return new Vector3(startX + position.x * tileSize, startY + position.y * tileSize, 0f);
     }
 
-    private void CheckForMatches()
+   
+
+    private List<Tile> FindMatches()
     {
-        for(int x=0; x<width; x++)
+        List<Tile> matches = new List<Tile>();
+
+
+        //horizontal matches
+        for(int y=0; y < height; y++)
         {
-            for(int y = 0; y < height; y++)
+            for(int x=0; x < width - 2; x++)
             {
-                Tile tile = board[x, y];
+                Tile first = board[x, y];
+                Tile second = board[x + 1, y];
+                Tile third = board[x + 2, y];
 
-                if(x <= width - 3)
+                if(first.tileType == second.tileType && second.tileType == third.tileType)
                 {
-                    if (board[x + 1, y].tileType == tile.tileType && board[x+2,y].tileType == tile.tileType)
-                    {
-                        Debug.Log("horizontal match at: " + tile.boardPosition);
-                    }
-                }
+                    if (!matches.Contains(first))
+                        matches.Add(first);
 
-                if (y <= height - 3)
-                {
-                    if (board[x, y+1].tileType == tile.tileType && board[x, y+2].tileType == tile.tileType)
-                    {
-                        Debug.Log("vertical match at: " + tile.boardPosition);
-                    }
+                    if (!matches.Contains(second))
+                        matches.Add(second);
+
+                    if (!matches.Contains(third))
+                        matches.Add(third);
                 }
             }
         }
+
+        //vertical matches
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height - 2; y++)
+            {
+                Tile first = board[x, y];
+                Tile second = board[x, y+1];
+                Tile third = board[x, y+2];
+
+                if (first.tileType == second.tileType && second.tileType == third.tileType)
+                {
+                    if (!matches.Contains(first))
+                        matches.Add(first);
+
+                    if (!matches.Contains(second))
+                        matches.Add(second);
+
+                    if (!matches.Contains(third))
+                        matches.Add(third);
+                }
+            }
+        }
+
+        return matches;
     }
 }
 
