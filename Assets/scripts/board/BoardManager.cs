@@ -190,7 +190,7 @@ public class BoardManager : MonoBehaviour
                 Tile second = board[x + 1, y];
                 Tile third = board[x + 2, y];
 
-                if(first.tileType == second.tileType && second.tileType == third.tileType)
+                if(first != null && second != null && third != null && first.tileType == second.tileType && second.tileType == third.tileType)
                 {
                     if (!matches.Contains(first))
                         matches.Add(first);
@@ -213,7 +213,7 @@ public class BoardManager : MonoBehaviour
                 Tile second = board[x, y+1];
                 Tile third = board[x, y+2];
 
-                if (first.tileType == second.tileType && second.tileType == third.tileType)
+                if (first != null && second != null && third != null && first.tileType == second.tileType && second.tileType == third.tileType)
                 {
                     if (!matches.Contains(first))
                         matches.Add(first);
@@ -228,6 +228,52 @@ public class BoardManager : MonoBehaviour
         }
 
         return matches;
+    }
+
+    private void RemoveMatches(List<Tile> matches)
+    {
+        foreach(Tile tile in matches)
+        {
+            Vector2Int position = tile.boardPosition;
+
+            board[position.x, position.y] = null;
+
+            Destroy(tile.gameObject);
+        }
+
+        ApplyGravity();
+    }
+
+    private void ApplyGravity()
+    {
+        for(int x = 0; x < width; x++)
+        {
+            int emptyY = -1;
+
+            for(int y = 0; y < height; y++)
+            {
+                if (board[x, y] == null)
+                {
+                    if(emptyY == -1)
+                    {
+                        emptyY = y;
+                    }
+                }
+
+                else if(emptyY != -1)
+                {
+                    Tile tile = board[x, y];
+
+                    board[x, emptyY] = tile;
+                    board[x, y] = null;
+
+                    tile.boardPosition = new Vector2Int(x, emptyY);
+                    tile.transform.position = GetWorldPosition(tile.boardPosition);
+
+                    emptyY++;
+                }
+            }
+        }
     }
 }
 
